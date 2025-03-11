@@ -71,5 +71,3 @@ RUN mv opencv_contrib-4.* opencv-sources
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
 CMD ["/bin/bash"]
-
-# python3 -c "import cv2;print(cv2.cuda.getCudaEnabledDeviceCount())"
