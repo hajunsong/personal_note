@@ -1,0 +1,15 @@
+echo 'export CUDA_HOME=/usr/local/cuda' >> ~/.bashrc
+echo 'PATH=/home/keti/.local/bin:$PATH' >> ~/.bashrc
+
+docker build --tag ubuntu:22.04 .
+docker run --gpus all -d -it --name hj-dock4 ubuntu22:test1 /bin/bash
+docker exec -it -u "keti" -w /home/keti grounding-dock /bin/bash
+
+cat /usr/include/x86_64-linux-gnu/cudnn_v*.h | grep CUDNN_MAJOR -A 2
+sudo find / -name 'libcudnn.*'
+
+sh Miniconda3-latest-Linux-x86_64.sh
+conda create -n MOT python=3.7
+conda install numpy
+
+python3 -c "import cv2;print(cv2.cuda.getCudaEnabledDeviceCount())"
