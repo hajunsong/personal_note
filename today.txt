@@ -1,0 +1,78 @@
+import sys, os
+sys.path.append("/home/keti/GroundingDINO")
+from groundingdino.util.inference import load_model, load_image, predict, annotate
+import groundingdino.datasets.transforms as T
+import cv2
+import time
+from PIL import Image 
+import numpy as np
+from typing import Tuple
+import torch
+
+
+def PIL2OpenCV(pil_image):
+    numpy_image= np.array(pil_image)
+    opencv_image = cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR)
+    return opencv_image
+
+def OpenCV2PIL(opencv_image):
+    color_coverted = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2RGB)
+    pil_image = Image.fromarray(color_coverted)
+    return pil_image
+
+def cvt_image(frame) -> Tuple[np.array, torch.Tensor]:
+    transform = T.Compose(
+        [
+            T.RandomResize([800], max_size=1333),
+            T.ToTensor(),
+            T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+        ]
+    )
+    # def OpenCV2PIL(opencv_image):
+    color_coverted = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    image_source = Image.fromarray(color_coverted)
+
+    image = np.asarray(image_source)
+    image_transformed, _ = transform(image_source, None)
+    return image, image_transformed
+
+if __name__ == '__main__':
+    model = load_model("../GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py", 
+                       "../GroundingDINO/weights/groundingdino_swint_ogc.pth")
+    IMAGE_PATH = "GroundingDINO/.asset/cats.png"
+    TEXT_PROMPT = "person"
+    BOX_TRESHOLD = 0.35
+    TEXT_TRESHOLD = BOX_TRESHOLD - 0.1
+
+    capture = cv2.VideoCapture("videos/dance_demo.mp4")
+
+    now = time
+    cur_time = now.strftime('%Y-%m-%d-%H-%M-%S')
+    dir_name = 'test/' + cur_time
+    # os.mkdir('test')
+    os.mkdir(dir_name)
+
+    indx = 0
+    while True:
+        ret, frame = capture.read()
+        if frame is None:
+            print("End of stream")
+            break
+
+        image_source, image = cvt_image(frame)
+
+        boxes, logits, phrases = predict(model=model, image=image, caption=TEXT_PROMPT, box_threshold=BOX_TRESHOLD, text_threshold=TEXT_TRESHOLD)
+
+        annotated_frame = annotate(image_source=image_source, boxes=boxes, logits=logits, phrases=phrases)
+        origin_frame = PIL2OpenCV(image_source)
+
+        # cv2.imshow("original_image", origin_frame)
+        cv2.imshow("annotated_image ", annotated_frame)
+
+        cv2.imwrite(dir_name + "/" + "%03d" % indx + ".jpg", annotated_frame)
+        # cv2.imwrite(dir_name + "/pred.jpg", annotated_frame)
+        # cv2.imwrite(dir_name + "/origin.jpg", origin_frame)
+
+        indx += 1
+
+        cv2.waitKey(1)
