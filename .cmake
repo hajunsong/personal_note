@@ -40,3 +40,6 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 -D CUDNN_INCLUDE_DIR=/usr/include \
 -D PYTHON3_EXECUTABLE=/home/keti/miniconda3/envs/mot-env/bin/python3.8 \
 -D PYTHON3_PACKAGES_PATH=/home/keti/miniconda3/envs/mot-env/lib/python3.8/site-packages ..
+
+work : 89
+home : 86
