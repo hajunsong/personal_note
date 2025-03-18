@@ -38,8 +38,8 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 -D CUDA_ARCH_PTX=8.9 \
 -D CUDNN_LIBRARY=/usr/lib/x86_64-linux-gnu/libcudnn.so.9.7.1 \
 -D CUDNN_INCLUDE_DIR=/usr/include \
--D PYTHON3_EXECUTABLE=/home/keti/miniconda3/envs/mot-env/bin/python3.8 \
--D PYTHON3_PACKAGES_PATH=/home/keti/miniconda3/envs/mot-env/lib/python3.8/site-packages ..
+-D PYTHON3_EXECUTABLE=/home/keti/miniconda3/envs/ground-sam/bin/python3.8 \
+-D PYTHON3_PACKAGES_PATH=/usr/local/lib/python3.8/dist-packages ..
 
 work : 89
 home : 86
