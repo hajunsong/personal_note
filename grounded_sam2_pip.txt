@@ -127,3 +127,5 @@ zstandard @ file:///croot/zstandard_1714677652653/work
 # ubuntu : 22.04
 # gcc : 11.4.0
 # python : 3.10.14
+# cud;nn : 8.9.0
+# cuda : 12.1
