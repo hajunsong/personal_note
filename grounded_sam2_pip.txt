@@ -123,3 +123,7 @@ urllib3 @ file:///croot/urllib3_1715635851070/work
 wcwidth @ file:///Users/ktietz/demo/mc3/conda-bld/wcwidth_1629357192024/work
 yapf==0.43.0
 zstandard @ file:///croot/zstandard_1714677652653/work
+
+# ubuntu : 22.04
+# gcc : 11.4.0
+# python : 3.10.14
